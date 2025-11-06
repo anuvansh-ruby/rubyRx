@@ -13,7 +13,7 @@ spec:
         run.googleapis.com/cpu: "2"
         run.googleapis.com/max-instances: "10"
         run.googleapis.com/min-instances: "1"
-        run.googleapis.com/cloudsql-instances: "PROJECT_ID:REGION:INSTANCE_NAME"
+        run.googleapis.com/cloudsql-instances: "PROJECT_ID:REGION:ruby-rx-main-db,PROJECT_ID:REGION:ruby-rx-medicine-db"
         run.googleapis.com/secrets: |
           /etc/secrets/gcp-service-account.json:gcp-service-account-key:latest
     spec:
@@ -21,121 +21,121 @@ spec:
       containerConcurrency: 1000
       timeoutSeconds: 300
       containers:
-      - image: gcr.io/PROJECT_ID/ruby-rx-app:latest
-        ports:
-        - containerPort: 8080
-        env:
-        - name: NODE_ENV
-          value: "production"
-        - name: PORT
-          value: "8080"
-        - name: MAIN_DB_USER
-          valueFrom:
-            secretKeyRef:
-              name: db-credentials
-              key: username
-        - name: MAIN_DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: db-credentials
-              key: password
-        - name: MAIN_DB_NAME
-          valueFrom:
-            secretKeyRef:
-              name: db-credentials
-              key: database
-        - name: MEDICINE_DB_USER
-          valueFrom:
-            secretKeyRef:
-              name: medicine-db-credentials
-              key: username
-        - name: MEDICINE_DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: medicine-db-credentials
-              key: password
-        - name: MEDICINE_DB_NAME
-          valueFrom:
-            secretKeyRef:
-              name: medicine-db-credentials
-              key: database
-        - name: REDIS_CONNECTION_STRING
-          valueFrom:
-            secretKeyRef:
-              name: redis-credentials
-              key: connection-string
-        - name: JWT_SECRET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: app-secrets
-              key: jwt-secret
-        - name: GOOGLE_OAUTH_CLIENT_ID
-          valueFrom:
-            secretKeyRef:
-              name: oauth-credentials
-              key: google-client-id
-        - name: GOOGLE_OAUTH_CLIENT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: oauth-credentials
-              key: google-client-secret
-        - name: GOOGLE_OAUTH_REDIRECT_URI
-          valueFrom:
-            secretKeyRef:
-              name: oauth-credentials
-              key: google-redirect-uri
-        - name: LINKEDIN_OAUTH_CLIENT_ID
-          valueFrom:
-            secretKeyRef:
-              name: oauth-credentials
-              key: linkedin-client-id
-        - name: LINKEDIN_OAUTH_CLIENT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: oauth-credentials
-              key: linkedin-client-secret
-        - name: LINKEDIN_OAUTH_REDIRECT_URI
-          valueFrom:
-            secretKeyRef:
-              name: oauth-credentials
-              key: linkedin-redirect-uri
-        - name: GMAIL_USER
-          valueFrom:
-            secretKeyRef:
-              name: email-credentials
-              key: gmail-user
-        - name: GMAIL_APP_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: email-credentials
-              key: gmail-app-password
-        - name: WHATSAPP_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: api-keys
-              key: whatsapp-api-key
-        - name: GCP_PROJECT_ID
-          valueFrom:
-            secretKeyRef:
-              name: gcp-config
-              key: project-id
-        - name: GENAI_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: api-keys
-              key: genai-api-key
-        resources:
-          limits:
-            memory: "2Gi"
-            cpu: "2"
-          requests:
-            memory: "1Gi" 
-            cpu: "1"
-        volumeMounts:
-        - name: gcp-service-account
-          mountPath: /etc/secrets
-          readOnly: true
+        - image: gcr.io/PROJECT_ID/ruby-rx-app:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "8080"
+            - name: MAIN_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: username
+            - name: MAIN_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: password
+            - name: MAIN_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: database
+            - name: MEDICINE_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: medicine-db-credentials
+                  key: username
+            - name: MEDICINE_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: medicine-db-credentials
+                  key: password
+            - name: MEDICINE_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: medicine-db-credentials
+                  key: database
+            - name: REDIS_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: redis-credentials
+                  key: connection-string
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: jwt-secret
+            - name: GOOGLE_OAUTH_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: oauth-credentials
+                  key: google-client-id
+            - name: GOOGLE_OAUTH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: oauth-credentials
+                  key: google-client-secret
+            - name: GOOGLE_OAUTH_REDIRECT_URI
+              valueFrom:
+                secretKeyRef:
+                  name: oauth-credentials
+                  key: google-redirect-uri
+            - name: LINKEDIN_OAUTH_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: oauth-credentials
+                  key: linkedin-client-id
+            - name: LINKEDIN_OAUTH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: oauth-credentials
+                  key: linkedin-client-secret
+            - name: LINKEDIN_OAUTH_REDIRECT_URI
+              valueFrom:
+                secretKeyRef:
+                  name: oauth-credentials
+                  key: linkedin-redirect-uri
+            - name: GMAIL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: email-credentials
+                  key: gmail-user
+            - name: GMAIL_APP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: email-credentials
+                  key: gmail-app-password
+            - name: WHATSAPP_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-keys
+                  key: whatsapp-api-key
+            - name: GCP_PROJECT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: gcp-config
+                  key: project-id
+            - name: GENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-keys
+                  key: genai-api-key
+          resources:
+            limits:
+              memory: "2Gi"
+              cpu: "2"
+            requests:
+              memory: "1Gi"
+              cpu: "1"
+          volumeMounts:
+            - name: gcp-service-account
+              mountPath: /etc/secrets
+              readOnly: true
       volumes:
-      - name: gcp-service-account
-        secret:
-          secretName: gcp-service-account-key
+        - name: gcp-service-account
+          secret:
+            secretName: gcp-service-account-key

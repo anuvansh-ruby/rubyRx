@@ -40,18 +40,18 @@ gcloud config set project ${PROJECT_ID}
 echo -e "${YELLOW}🔧 Enabling required GCP APIs...${NC}"
 gcloud services enable cloudbuild.googleapis.com
 gcloud services enable run.googleapis.com
+gcloud services enable containerregistry.googleapis.com
 gcloud services enable sqladmin.googleapis.com
 gcloud services enable redis.googleapis.com
 gcloud services enable vision.googleapis.com
 gcloud services enable aiplatform.googleapis.com
+gcloud services enable secretmanager.googleapis.com
 
-# Build the Docker image
-echo -e "${YELLOW}🏗️  Building Docker image...${NC}"
-docker build -t ${IMAGE_NAME}:latest .
-
-# Push the image to Google Container Registry
-echo -e "${YELLOW}📤 Pushing image to GCR...${NC}"
-docker push ${IMAGE_NAME}:latest
+# Build and deploy using Cloud Build
+echo -e "${YELLOW}🏗️  Building and deploying with Cloud Build...${NC}"
+gcloud builds submit --config=cloudbuild.yaml \
+    --substitutions=_REGION=${REGION} \
+    --timeout=1800s .
 
 # Create Cloud SQL instance (PostgreSQL) if it doesn't exist
 echo -e "${YELLOW}🗄️  Setting up Cloud SQL instances...${NC}"
@@ -136,16 +136,8 @@ echo "- gcp-config (project-id)"
 gcloud secrets create gcp-service-account-key \
     --data-file=./service-account-key.json || echo "Secret already exists"
 
-# Deploy to Cloud Run
-echo -e "${YELLOW}🚀 Deploying to Cloud Run...${NC}"
-
-# Update the service YAML with actual project ID
-sed -i.bak "s/PROJECT_ID/${PROJECT_ID}/g" cloud-run-service.yaml
-sed -i.bak "s/REGION/${REGION}/g" cloud-run-service.yaml
-
-# Deploy using gcloud run services replace
-gcloud run services replace cloud-run-service.yaml \
-    --region=${REGION}
+# Note: Cloud Run deployment is handled by Cloud Build
+echo -e "${YELLOW}📋 Cloud Run deployment completed via Cloud Build${NC}"
 
 # Allow unauthenticated access (optional, remove if you want authentication)
 gcloud run services add-iam-policy-binding ${SERVICE_NAME} \
