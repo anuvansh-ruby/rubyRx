@@ -12,7 +12,7 @@ spec:
         run.googleapis.com/cpu: "2"
         run.googleapis.com/max-instances: "10"
         run.googleapis.com/min-instances: "1"
-        run.googleapis.com/cloudsql-instances: "PROJECT_ID:REGION:ruby-rx-main-db,PROJECT_ID:REGION:ruby-rx-medicine-db"
+        # run.googleapis.com/cloudsql-instances: "PROJECT_ID:REGION:ruby-rx-main-db,PROJECT_ID:REGION:ruby-rx-medicine-db"
     spec:
       containerConcurrency: 1000
       timeoutSeconds: 300
@@ -23,10 +23,8 @@ spec:
           env:
             - name: NODE_ENV
               value: "production"
-            - name: PORT
-              value: "8080"
             - name: DB_HOST
-              value: "127.0.0.1"
+              value: "92.113.147.146"
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
@@ -45,7 +43,7 @@ spec:
             - name: DB_PORT
               value: "5432"
             - name: MEDICINE_DB_HOST
-              value: "127.0.0.1"
+              value: "92.113.147.146"
             - name: MEDICINE_DB_USER
               valueFrom:
                 secretKeyRef:
