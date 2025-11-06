@@ -1,42 +1,19 @@
-# Cloud Build configuration for Ruby RX App
+# Simplified Cloud Build configuration for Ruby RX App
+# Run setup-artifact-registry.sh first to create the repository
 steps:
-  # Enable Artifact Registry API and create repository
+  # Configure Docker authentication for Artifact Registry
   - name: "gcr.io/cloud-builders/gcloud"
-    entrypoint: "bash"
-    args:
-      - "-c"
-      - |
-        echo "Enabling Artifact Registry API..."
-        gcloud services enable artifactregistry.googleapis.com
-
-        echo "Waiting for API to be ready..."
-        sleep 10
-
-        echo "Creating Artifact Registry repository..."
-        if ! gcloud artifacts repositories describe ruby-rx-repo --location=$_REGION >/dev/null 2>&1; then
-          gcloud artifacts repositories create ruby-rx-repo \
-            --repository-format=docker \
-            --location=$_REGION \
-            --description="Ruby RX App Docker Repository"
-          echo "Repository created successfully"
-        else
-          echo "Repository already exists"
-        fi
-
-        echo "Configuring Docker authentication..."
-        gcloud auth configure-docker $_REGION-docker.pkg.dev --quiet
+    args: ["auth", "configure-docker", "$_REGION-docker.pkg.dev", "--quiet"]
 
   # Build the Docker image
   - name: "gcr.io/cloud-builders/docker"
     args:
-      [
-        "build",
-        "-t",
-        "$_REGION-docker.pkg.dev/$PROJECT_ID/ruby-rx-repo/ruby-rx-app:latest",
-        "-t",
-        "$_REGION-docker.pkg.dev/$PROJECT_ID/ruby-rx-repo/ruby-rx-app:$BUILD_ID",
-        ".",
-      ]
+      - "build"
+      - "-t"
+      - "$_REGION-docker.pkg.dev/$PROJECT_ID/ruby-rx-repo/ruby-rx-app:latest"
+      - "-t"
+      - "$_REGION-docker.pkg.dev/$PROJECT_ID/ruby-rx-repo/ruby-rx-app:$BUILD_ID"
+      - "."
 
   # Push the Docker image to Artifact Registry
   - name: "gcr.io/cloud-builders/docker"
@@ -66,13 +43,11 @@ steps:
   # Deploy to Cloud Run
   - name: "gcr.io/cloud-builders/gcloud"
     args:
-      [
-        "run",
-        "services",
-        "replace",
-        "cloud-run-service.yaml",
-        "--region=$_REGION",
-      ]
+      - "run"
+      - "services"
+      - "replace"
+      - "cloud-run-service.yaml"
+      - "--region=$_REGION"
 
 # Specify images to be pushed to Artifact Registry
 images:

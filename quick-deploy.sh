@@ -39,9 +39,15 @@ gcloud services enable cloudbuild.googleapis.com
 gcloud services enable run.googleapis.com
 gcloud services enable artifactregistry.googleapis.com
 
+# Setup Artifact Registry repository first
+echo -e "${YELLOW}📦 Setting up Artifact Registry repository...${NC}"
+export GCP_PROJECT_ID=${PROJECT_ID}
+export GCP_REGION=${REGION}
+./setup-artifact-registry.sh
+
 # Submit build
 echo -e "${YELLOW}🏗️  Submitting build to Cloud Build...${NC}"
-gcloud builds submit --config=cloudbuild.yaml \
+gcloud builds submit --config=cloudbuild-simple.yaml \
     --substitutions=_REGION=${REGION} \
     --timeout=1800s .
 
