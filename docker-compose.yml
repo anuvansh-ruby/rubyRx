@@ -1,0 +1,117 @@
+version: '3.8'
+
+services:
+  # Main Application
+  ruby-rx-app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5500:5500"
+    environment:
+      - NODE_ENV=development
+      - PORT=5500
+      - DB_HOST=postgres-main
+      - DB_USER=rubyuser
+      - DB_PASSWORD=rubypassword
+      - DB_NAME=ruby_ai_db
+      - DB_PORT=5432
+      - MEDICINE_DB_HOST=postgres-medicine
+      - MEDICINE_DB_USER=medicineuser
+      - MEDICINE_DB_PASSWORD=medicinepassword
+      - MEDICINE_DB_NAME=medicine_db
+      - MEDICINE_DB_PORT=5432
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=your_jwt_secret_for_development
+    depends_on:
+      - postgres-main
+      - postgres-medicine
+      - redis
+    volumes:
+      - ./b_ruby_rx_app/uploads:/usr/src/app/uploads
+    restart: unless-stopped
+    networks:
+      - ruby-rx-network
+
+  # Main PostgreSQL Database
+  postgres-main:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER=rubyuser
+      - POSTGRES_PASSWORD=rubypassword
+      - POSTGRES_DB=ruby_ai_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_main_data:/var/lib/postgresql/data
+      - ./b_ruby_rx_app/database/migrations:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    networks:
+      - ruby-rx-network
+
+  # Medicine PostgreSQL Database
+  postgres-medicine:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER=medicineuser
+      - POSTGRES_PASSWORD=medicinepassword
+      - POSTGRES_DB=medicine_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_medicine_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - ruby-rx-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    networks:
+      - ruby-rx-network
+
+  # pgAdmin for database management (optional)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@rubyRx.com
+      - PGADMIN_DEFAULT_PASSWORD=admin123
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres-main
+      - postgres-medicine
+    restart: unless-stopped
+    networks:
+      - ruby-rx-network
+
+  # Redis Commander for Redis management (optional)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - ruby-rx-network
+
+volumes:
+  postgres_main_data:
+  postgres_medicine_data:
+  redis_data:
+  pgadmin_data:
+
+networks:
+  ruby-rx-network:
+    driver: bridge
