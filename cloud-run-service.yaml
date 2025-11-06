@@ -4,7 +4,6 @@ metadata:
   name: ruby-rx-app
   annotations:
     run.googleapis.com/ingress: all
-    run.googleapis.com/cpu-throttling: "false"
 spec:
   template:
     metadata:
