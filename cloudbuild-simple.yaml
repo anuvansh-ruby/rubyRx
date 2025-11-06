@@ -30,24 +30,23 @@ steps:
         "$_REGION-docker.pkg.dev/$PROJECT_ID/ruby-rx-repo/ruby-rx-app:$BUILD_ID",
       ]
 
-  # Update the Cloud Run service YAML with the project ID and region
-  - name: "gcr.io/cloud-builders/gcloud"
-    entrypoint: "bash"
-    args:
-      - "-c"
-      - |
-        sed -i "s/PROJECT_ID/$PROJECT_ID/g" cloud-run-service.yaml
-        sed -i "s/REGION/$_REGION/g" cloud-run-service.yaml
-        sed -i "s/:latest/:$BUILD_ID/g" cloud-run-service.yaml
-
-  # Deploy to Cloud Run
+  # Deploy to Cloud Run using simple gcloud run deploy
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       - "run"
-      - "services"
-      - "replace"
-      - "cloud-run-service.yaml"
+      - "deploy"
+      - "ruby-rx-app"
+      - "--image=$_REGION-docker.pkg.dev/$PROJECT_ID/ruby-rx-repo/ruby-rx-app:$BUILD_ID"
       - "--region=$_REGION"
+      - "--platform=managed"
+      - "--allow-unauthenticated"
+      - "--memory=2Gi"
+      - "--cpu=2"
+      - "--max-instances=10"
+      - "--min-instances=1"
+      - "--port=8080"
+      - "--timeout=300"
+      - "--concurrency=1000"
 
 # Specify images to be pushed to Artifact Registry
 images:

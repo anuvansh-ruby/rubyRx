@@ -17,7 +17,6 @@ spec:
         run.googleapis.com/secrets: |
           /etc/secrets/gcp-service-account.json:gcp-service-account-key:latest
     spec:
-      serviceAccountName: ruby-rx-service-account
       containerConcurrency: 1000
       timeoutSeconds: 300
       containers:
