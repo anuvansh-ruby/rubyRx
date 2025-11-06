@@ -14,8 +14,6 @@ spec:
         run.googleapis.com/max-instances: "10"
         run.googleapis.com/min-instances: "1"
         run.googleapis.com/cloudsql-instances: "PROJECT_ID:REGION:ruby-rx-main-db,PROJECT_ID:REGION:ruby-rx-medicine-db"
-        run.googleapis.com/secrets: |
-          /etc/secrets/gcp-service-account.json:gcp-service-account-key:latest
     spec:
       containerConcurrency: 1000
       timeoutSeconds: 300
@@ -130,11 +128,3 @@ spec:
             requests:
               memory: "1Gi"
               cpu: "1"
-          volumeMounts:
-            - name: gcp-service-account
-              mountPath: /etc/secrets
-              readOnly: true
-      volumes:
-        - name: gcp-service-account
-          secret:
-            secretName: gcp-service-account-key
