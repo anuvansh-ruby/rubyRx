@@ -26,98 +26,98 @@ spec:
             - name: MAIN_DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: db-credentials
-                  key: username
+                  name: db-credentials--username
+                  key: latest
             - name: MAIN_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: db-credentials
-                  key: password
+                  name: db-credentials--password
+                  key: latest
             - name: MAIN_DB_NAME
               valueFrom:
                 secretKeyRef:
-                  name: db-credentials
-                  key: database
+                  name: db-credentials--database
+                  key: latest
             - name: MEDICINE_DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: medicine-db-credentials
-                  key: username
+                  name: medicine-db-credentials--username
+                  key: latest
             - name: MEDICINE_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: medicine-db-credentials
-                  key: password
+                  name: medicine-db-credentials--password
+                  key: latest
             - name: MEDICINE_DB_NAME
               valueFrom:
                 secretKeyRef:
-                  name: medicine-db-credentials
-                  key: database
+                  name: medicine-db-credentials--database
+                  key: latest
             - name: REDIS_CONNECTION_STRING
               valueFrom:
                 secretKeyRef:
-                  name: redis-credentials
-                  key: connection-string
+                  name: redis-credentials--connection-string
+                  key: latest
             - name: JWT_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: app-secrets
-                  key: jwt-secret
+                  name: app-secrets--jwt-secret
+                  key: latest
             - name: GOOGLE_OAUTH_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: oauth-credentials
-                  key: google-client-id
+                  name: oauth-credentials--google-client-id
+                  key: latest
             - name: GOOGLE_OAUTH_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: oauth-credentials
-                  key: google-client-secret
+                  name: oauth-credentials--google-client-secret
+                  key: latest
             - name: GOOGLE_OAUTH_REDIRECT_URI
               valueFrom:
                 secretKeyRef:
-                  name: oauth-credentials
-                  key: google-redirect-uri
+                  name: oauth-credentials--google-redirect-uri
+                  key: latest
             - name: LINKEDIN_OAUTH_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: oauth-credentials
-                  key: linkedin-client-id
+                  name: oauth-credentials--linkedin-client-id
+                  key: latest
             - name: LINKEDIN_OAUTH_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: oauth-credentials
-                  key: linkedin-client-secret
+                  name: oauth-credentials--linkedin-client-secret
+                  key: latest
             - name: LINKEDIN_OAUTH_REDIRECT_URI
               valueFrom:
                 secretKeyRef:
-                  name: oauth-credentials
-                  key: linkedin-redirect-uri
+                  name: oauth-credentials--linkedin-redirect-uri
+                  key: latest
             - name: GMAIL_USER
               valueFrom:
                 secretKeyRef:
-                  name: email-credentials
-                  key: gmail-user
+                  name: email-credentials--gmail-user
+                  key: latest
             - name: GMAIL_APP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: email-credentials
-                  key: gmail-app-password
+                  name: email-credentials--gmail-app-password
+                  key: latest
             - name: WHATSAPP_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: api-keys
-                  key: whatsapp-api-key
+                  name: api-keys--whatsapp-api-key
+                  key: latest
             - name: GCP_PROJECT_ID
               valueFrom:
                 secretKeyRef:
-                  name: gcp-config
-                  key: project-id
+                  name: gcp-config--project-id
+                  key: latest
             - name: GENAI_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: api-keys
-                  key: genai-api-key
+                  name: api-keys--genai-api-key
+                  key: latest
           resources:
             limits:
               memory: "2Gi"
