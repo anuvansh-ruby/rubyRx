@@ -21,7 +21,7 @@ spec:
       containerConcurrency: 1000
       timeoutSeconds: 300
       containers:
-        - image: gcr.io/PROJECT_ID/ruby-rx-app:latest
+        - image: REGION-docker.pkg.dev/PROJECT_ID/ruby-rx-repo/ruby-rx-app:latest
           ports:
             - containerPort: 8080
           env:

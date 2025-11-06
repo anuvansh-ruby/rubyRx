@@ -40,6 +40,7 @@ gcloud config set project ${PROJECT_ID}
 echo -e "${YELLOW}🔧 Enabling required GCP APIs...${NC}"
 gcloud services enable cloudbuild.googleapis.com
 gcloud services enable run.googleapis.com
+gcloud services enable artifactregistry.googleapis.com
 gcloud services enable containerregistry.googleapis.com
 gcloud services enable sqladmin.googleapis.com
 gcloud services enable redis.googleapis.com

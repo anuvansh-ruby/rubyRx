@@ -37,7 +37,7 @@ fi
 echo -e "${YELLOW}🔧 Enabling required APIs...${NC}"
 gcloud services enable cloudbuild.googleapis.com
 gcloud services enable run.googleapis.com
-gcloud services enable containerregistry.googleapis.com
+gcloud services enable artifactregistry.googleapis.com
 
 # Submit build
 echo -e "${YELLOW}🏗️  Submitting build to Cloud Build...${NC}"

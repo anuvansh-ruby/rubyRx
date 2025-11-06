@@ -39,12 +39,12 @@ RUN mkdir -p uploads/prescriptions && \
 USER node
 
 # Expose the port the app runs on
-EXPOSE 5500
+EXPOSE 8080
 
 # Add health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD node -e "const http = require('http'); \
-    const options = { hostname: 'localhost', port: 5500, path: '/api/health/databases', timeout: 2000 }; \
+    const options = { hostname: 'localhost', port: process.env.PORT || 8080, path: '/api/health/databases', timeout: 2000 }; \
     const req = http.request(options, (res) => { \
         process.exit(res.statusCode === 200 ? 0 : 1); \
     }); \
