@@ -23,21 +23,29 @@ spec:
           env:
             - name: NODE_ENV
               value: "production"
-            - name: MAIN_DB_USER
+            - name: PORT
+              value: "8080"
+            - name: DB_HOST
+              value: "127.0.0.1"
+            - name: DB_USER
               valueFrom:
                 secretKeyRef:
                   name: db-credentials--username
                   key: latest
-            - name: MAIN_DB_PASSWORD
+            - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: db-credentials--password
                   key: latest
-            - name: MAIN_DB_NAME
+            - name: DB_NAME
               valueFrom:
                 secretKeyRef:
                   name: db-credentials--database
                   key: latest
+            - name: DB_PORT
+              value: "5432"
+            - name: MEDICINE_DB_HOST
+              value: "127.0.0.1"
             - name: MEDICINE_DB_USER
               valueFrom:
                 secretKeyRef:
@@ -53,67 +61,84 @@ spec:
                 secretKeyRef:
                   name: medicine-db-credentials--database
                   key: latest
+            - name: MEDICINE_DB_PORT
+              value: "5432"
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: redis-credentials--connection-string
+                  key: latest
             - name: REDIS_CONNECTION_STRING
               valueFrom:
                 secretKeyRef:
                   name: redis-credentials--connection-string
                   key: latest
-            - name: JWT_SECRET_KEY
+            - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: app-secrets--jwt-secret
                   key: latest
-            - name: GOOGLE_OAUTH_CLIENT_ID
+            - name: GOOGLE_CLIENT_ID
               valueFrom:
                 secretKeyRef:
                   name: oauth-credentials--google-client-id
                   key: latest
-            - name: GOOGLE_OAUTH_CLIENT_SECRET
+            - name: GOOGLE_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: oauth-credentials--google-client-secret
                   key: latest
-            - name: GOOGLE_OAUTH_REDIRECT_URI
+            - name: GOOGLE_REDIRECT_URI
               valueFrom:
                 secretKeyRef:
                   name: oauth-credentials--google-redirect-uri
                   key: latest
-            - name: LINKEDIN_OAUTH_CLIENT_ID
+            - name: LINKEDIN_CLIENT_ID
               valueFrom:
                 secretKeyRef:
                   name: oauth-credentials--linkedin-client-id
                   key: latest
-            - name: LINKEDIN_OAUTH_CLIENT_SECRET
+            - name: LINKEDIN_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: oauth-credentials--linkedin-client-secret
                   key: latest
-            - name: LINKEDIN_OAUTH_REDIRECT_URI
+            - name: LINKEDIN_REDIRECT_URI
               valueFrom:
                 secretKeyRef:
                   name: oauth-credentials--linkedin-redirect-uri
                   key: latest
-            - name: GMAIL_USER
+            - name: EMAIL_USER
               valueFrom:
                 secretKeyRef:
                   name: email-credentials--gmail-user
                   key: latest
-            - name: GMAIL_APP_PASSWORD
+            - name: GOOGLE_EMAIL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: email-credentials--gmail-user
+                  key: latest
+            - name: GOOGLE_APP_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: email-credentials--gmail-app-password
                   key: latest
-            - name: WHATSAPP_API_KEY
+            - name: WASENDER_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: api-keys--whatsapp-api-key
                   key: latest
-            - name: GCP_PROJECT_ID
+            - name: GOOGLE_CLOUD_PROJECT_ID
               valueFrom:
                 secretKeyRef:
                   name: gcp-config--project-id
                   key: latest
-            - name: GENAI_API_KEY
+            - name: GEMINI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-keys--genai-api-key
+                  key: latest
+            - name: GOOGLE_GENERATIVE_AI_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: api-keys--genai-api-key
