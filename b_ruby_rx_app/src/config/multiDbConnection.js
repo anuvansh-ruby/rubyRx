@@ -9,7 +9,7 @@ const mainPool = new Pool({
     port: process.env.DB_PORT || 5432,
     max: 50, // Maximum number of clients in the pool
     idleTimeoutMillis: 30000, // How long a client is allowed to remain idle
-    connectionTimeoutMillis: 2000, // How long to wait before timing out when connecting a new client
+    connectionTimeoutMillis: 10000, // How long to wait before timing out when connecting a new client
 });
 
 // Medicine Database Pool
@@ -21,7 +21,7 @@ const medicinePool = new Pool({
     port: process.env.MEDICINE_DB_PORT || 5432,
     max: 50, // Smaller pool for medicine database
     idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000,
+    connectionTimeoutMillis: 10000,
 });
 
 // Initialize connections and handle events

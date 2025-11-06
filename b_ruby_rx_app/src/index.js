@@ -34,6 +34,15 @@ app.use('/api/v1', validateRequests.validateRequest);
 
 require('./routes/routes')(app);
 
+// Basic health check endpoint (fast response for startup probes)
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'SUCCESS',
+        message: 'Server is running',
+        timestamp: new Date().toISOString()
+    });
+});
+
 // Add database health check endpoint
 app.get('/api/health/databases', async (req, res) => {
     try {
@@ -56,19 +65,25 @@ const PORT = process.env.PORT || 5500;
 
 // Initialize databases and start server
 const startServer = async () => {
-    try {
-        // Initialize both database connections
-        await initializeDatabases();
+    // Start the server FIRST to pass health checks
+    const server = app.listen(PORT, '0.0.0.0', () => {
+        console.log(`✅ Server listening on port ${PORT}`);
+        console.log(`🏥 Main Database: ${process.env.DB_NAME || 'ruby_ai_db'}`);
+        console.log(`💊 Medicine Database: ${process.env.MEDICINE_DB_NAME || process.env.DB_NAME || 'ruby_ai_db'}`);
+    });
 
-        // Start the server
-        app.listen(PORT, '0.0.0.0', () => {
-            console.log(`Server running on port ${PORT}`);
-            console.log(`🏥 Main Database: ${process.env.DB_NAME || 'ruby_ai_db'}`);
-            console.log(`💊 Medicine Database: ${process.env.MEDICINE_DB_NAME || process.env.DB_NAME || 'ruby_ai_db'}`);
-        });
+    // Then initialize connections in the background
+    try {
+        console.log('🔄 Initializing database connections...');
+        await initializeDatabases();
+        
+        // Initialize Redis connection (non-blocking)
+        const { connectRedis } = require('./config/redisConnection');
+        await connectRedis();
     } catch (error) {
-        console.error('❌ Failed to start server:', error);
-        process.exit(1);
+        console.error('⚠️  Warning: Some connections failed during initialization:', error.message);
+        console.log('ℹ️  Server will continue running with degraded functionality');
+        // Don't exit - let the server handle requests with degraded functionality
     }
 };
 
